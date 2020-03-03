@@ -8,11 +8,11 @@
 * callback - 为可选的回调函数
 > 使用 `setState()` 改变状态之后，立刻通过this.state拿不到最新的状态
 
-可以使用 `comonentDidUpdate()` 或者 `setState(updater, callback)` 中的回调函数 `callback` 保证在应用更新后触发，通常建议使用 `coponentDidUpdate()`
+可以使用 `componentDidUpdate()` 或者 `setState(updater, callback)` 中的回调函数 `callback` 保证在应用更新后触发，通常建议使用 `componentDidUpdate()`
 
 > 多次`setState()`函数调用产生的效果会合并
 
-为了更好的感知性能，React 会在同一周期内会对多个 `setState()` 进行批处理。通过触发一次组件的更新来引发重绘。后调用的 `setState()` 将覆盖同一周期内先调用 `setState()` 的值。所以如果是下一个 state 依赖前一个 state 的话，推荐给 `setState()` 传 function
+为了更好的感知性能，React 会在同一周期内会对多个 `setState()` 进行批处理。通过触发一次组件的更新来引发回流。后调用的 `setState()` 将覆盖同一周期内先调用 `setState()` 的值。所以如果是下一个 state 依赖前一个 state 的话，推荐给 `setState()` 传 function
 ```
 onClick = () => {
     this.setState({ quantity: this.state.quantity + 1 });
@@ -32,7 +32,7 @@ Object.assign(
     * React 生命周期函数
 * 异步更新
     * 绕过React通过 addEventListener 直接添加的事件处理函数
-    * 通过setTimeout || setInterval 产生的异步调用
+    * 通过 setTimeout || setInterval 产生的异步调用
 
 # setState()被调用之后，源码执行栈
 > react 参照版本 **15.6.0** 最新版本是**16.12.0**
@@ -122,11 +122,11 @@ var ReactDefaultBatchingStrategy = {
 ## 5. transaction initialize and close
 > 源码路径 [`src/renderers/shared/stack/reconciler/ReactDefaultBatchingStrategy.js`](https://github.com/facebook/react/blob/v15.6.0/src/renderers/shared/stack/reconciler/ReactDefaultBatchingStrategy.js)
 
-Transaction 中注册了两个 wrapper，`FLUSH_BATCHED_UPDATES` 和 `FLUSH_BATCHED_UPDATES`。
+Transaction 中注册了两个 wrapper，`RESET_BATCHED_UPDATES` 和 `FLUSH_BATCHED_UPDATES`。
 
 initialize 阶段，两个 wrapper 都是空方法，什么都不做。
 
-close 阶段，`FLUSH_BATCHED_UPDATES` 将 isBatchingUpdates 设置为false；`FLUSH_BATCHED_UPDATES` 运行 flushBatchedUpdates 执行update。
+close 阶段，`RESET_BATCHED_UPDATES` 将 isBatchingUpdates 设置为false；`FLUSH_BATCHED_UPDATES` 运行 flushBatchedUpdates 执行update。
 ```
 var RESET_BATCHED_UPDATES = {
   initialize: emptyFunction,
