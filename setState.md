@@ -154,7 +154,7 @@ var FLUSH_BATCHED_UPDATES = {
     * 如果更新队列有一个更新，那么返回更新值；
     * 如果更新队列有多个更新，那么通过for循环将它们合并；
 
-5. 在一个生命周期内，在componentShouldUpdate执行之前，所有的state变化都会被合并，最后统一处理。
+5. 在一个生命周期内，在shouldComponentUpdate执行之前，所有的state变化都会被合并，最后统一处理。
 
 `flushBatchedUpdates(); runBatchedUpdates()` 源码路径 [`src/renderers/shared/stack/reconciler/ReactUpdates.js`](https://github.com/facebook/react/blob/v15.6.0/src/renderers/shared/stack/reconciler/ReactUpdates.js#L187)
 ```
@@ -253,7 +253,7 @@ performUpdateIfNecessary: function(
 
 # 事务概念
 
-简单地说，一个 Transaction 就是将需要执行的 anyMethod 使用 wrapper 封装起来，在通过 Transaction 提供的 perform 方法执行，而在 perform 之前，先执行所有 wrapper 中的 initialize 方法，perform 之后再执行所有 wrapper 中的 close 方法。一组 initialize 及 close 方法称为一个 wrapper，Transaction 支持多个 wrapper 叠加。
+简单地说，一个 Transaction 就是将需要执行的 anyMethod 使用 wrapper 封装起来，再通过 Transaction 提供的 perform 方法执行，而在 perform 之前，先执行所有 wrapper 中的 initialize 方法，perform 之后再执行所有 wrapper 中的 close 方法。一组 initialize 及 close 方法称为一个 wrapper，Transaction 支持多个 wrapper 叠加。
 ![](https://user-gold-cdn.xitu.io/2020/2/26/17080bf6d2991948?w=1488&h=1052&f=png&s=117067)
 
 React 中的 Transaction 提供了一个 Mixin 方便其他模块实现自己需要的事务。要实现自己的事务，需要额外实现一个抽象的 `getTransactionWrappers()` 接口，这个接口是 Transaction 用来获取所有 wrapper 的 initialize 和 close 方法，因此需要返回一个数组对象，每个对象分别有 key 为 initialize 和 close 的方法。
